@@ -266,7 +266,8 @@ a { color: inherit; }
   text-decoration: none;
 }
 .nav-links a:not(.btn):hover,
-.nav-links a:not(.btn):focus-visible { color: var(--gold); }
+.nav-links a:not(.btn):focus-visible,
+.nav-links a[aria-current="page"] { color: var(--gold); }
 
 /* Hamburger (hidden on desktop) */
 .nav-toggle {
@@ -386,10 +387,9 @@ a.card:focus-visible {
   background: var(--gold);
 }
 
-/* ---------- Testimonial ---------- */
-.testimonial {
-  max-width: 450px;
-  min-height: 125px;
+/* ---------- Callout box: testimonials (home) and features (service pages) ---------- */
+.testimonial,
+.feature {
   background: var(--shade);
   border-left: 5px solid var(--gold-light);
   padding: 20px 25px;
@@ -397,7 +397,64 @@ a.card:focus-visible {
   flex-direction: column;
   justify-content: center;
 }
+
+/* ---------- Testimonial ---------- */
+.testimonial {
+  max-width: 450px;
+  min-height: 125px;
+}
 .testimonial + .testimonial { margin-top: 25px; }
+
+/* ---------- Feature grid (service pages: "How We Help" capabilities) ---------- */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 25px;
+  list-style: none;
+  margin: 40px 0 0;
+  padding: 0;
+}
+
+.feature-title {
+  color: var(--gold);
+  font-family: var(--font-body);
+  font-size: 21px;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.feature-text {
+  margin-top: 10px;
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: normal;
+}
+
+/* ---------- Icon badge: a service icon on a small green tile ---------- */
+.icon-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;   /* same feel as the 31px-radius service cards, scaled down */
+  background: var(--green-900);
+}
+.icon-badge img { width: 32px; height: 32px; }
+
+/* ---------- Text link with arrow ("← View All Services") ---------- */
+.back-link {
+  color: var(--green-900);
+  font-family: var(--font-body);
+  font-size: 20px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.back-link:hover,
+.back-link:focus-visible { text-decoration: underline; }
 
 .testimonial-quote {
   color: var(--white);
@@ -542,6 +599,48 @@ textarea.form-field {
 .contact-item a:hover { text-decoration: underline; }
 
 
+/* ---------- Service pages ---------- */
+.breadcrumb {
+  margin-bottom: 15px;
+  font-family: var(--font-body);
+  font-size: 18px;
+  color: var(--green-900);
+}
+.breadcrumb a { font-weight: 700; text-decoration: none; }
+.breadcrumb a:hover,
+.breadcrumb a:focus-visible { text-decoration: underline; }
+
+.service-title {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.service-lead {
+  margin-top: 25px;
+  font-family: var(--font-body);
+  font-size: 22px;
+  line-height: 1.35;
+}
+
+.service-media { justify-self: center; }
+.service-media img,
+.service-media svg { display: block; }
+.service-media--photo img { width: 330px; }                  /* portrait photos, same size as the home About image */
+.service-media--illustration img,
+.service-media--illustration svg {
+  width: 420px;
+  max-width: 100%;
+  height: auto;
+  border-radius: 20px;
+  box-shadow: 0 6px 18px rgba(1, 50, 32, 0.18);
+}
+
+.service-cta .text-md { margin-top: 15px; }
+.service-cta .btn-gold { margin-top: 30px; }
+.service-cta .back-link { margin-top: 25px; }
+
+
 /* ==========================================================================
    9. Footer
    ========================================================================== */
@@ -603,6 +702,7 @@ textarea.form-field {
   .split,
   .split--60-40 { grid-template-columns: 1fr; gap: 40px; }
   .about-media { justify-self: center; }
+  .feature-grid { grid-template-columns: 1fr; }
   .bullet-list,
   .testimonial { max-width: none; }
 }
@@ -628,6 +728,13 @@ textarea.form-field {
   .hero-logo { width: 240px; height: auto; }
   .hero-name { font-size: 46px; }
   .hero-tagline { font-size: 22px; }
-  .about-text p { font-size: 20px; }
+  .about-text p,
+  .text-lg { font-size: 20px; }
   .about-media img { width: 100%; max-width: 330px; }
+
+  .service-title { gap: 14px; }
+  .icon-badge { width: 52px; height: 52px; border-radius: 13px; }
+  .icon-badge img { width: 26px; height: 26px; }
+  .service-lead { font-size: 20px; }
+  .service-media--photo img { width: 100%; max-width: 330px; }
 }
