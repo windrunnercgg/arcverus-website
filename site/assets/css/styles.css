@@ -1,0 +1,633 @@
+/* ==========================================================================
+   ArcVerus — site styles
+
+   Organized so sub-pages can reuse everything:
+     1. Fonts            5. Buttons
+     2. Design tokens    6. Header / nav
+     3. Base             7. Components (card, testimonial, bullet list, form)
+     4. Layout + type    8. Page sections (homepage-specific)
+                         9. Footer
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1. Fonts — self-hosted, free look-alikes so every visitor sees the same type
+      - TeX Gyre Schola  ≈ Century          (GUST Font License)
+      - TeX Gyre Termes  ≈ Times New Roman  (GUST Font License)
+      - Inter                               (SIL Open Font License)
+      License files live in assets/fonts/.
+      The *-override values copy the original fonts' line spacing (measured
+      from Century and Times New Roman), so "line-height: normal" matches the design.
+   ========================================================================== */
+@font-face { font-family: "TeX Gyre Schola"; src: url("../fonts/texgyreschola-regular.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; ascent-override: 98.6%; descent-override: 21.6%; line-gap-override: 0%; }
+@font-face { font-family: "TeX Gyre Schola"; src: url("../fonts/texgyreschola-bold.woff2")    format("woff2"); font-weight: 700; font-style: normal; font-display: swap; ascent-override: 98.6%; descent-override: 21.6%; line-gap-override: 0%; }
+@font-face { font-family: "TeX Gyre Termes"; src: url("../fonts/texgyretermes-regular.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; ascent-override: 89.1%; descent-override: 21.6%; line-gap-override: 4.2%; }
+@font-face { font-family: "TeX Gyre Termes"; src: url("../fonts/texgyretermes-italic.woff2")  format("woff2"); font-weight: 400; font-style: italic; font-display: swap; ascent-override: 89.1%; descent-override: 21.6%; line-gap-override: 4.2%; }
+@font-face { font-family: "TeX Gyre Termes"; src: url("../fonts/texgyretermes-bold.woff2")    format("woff2"); font-weight: 700; font-style: normal; font-display: swap; ascent-override: 89.1%; descent-override: 21.6%; line-gap-override: 4.2%; }
+@font-face { font-family: "Inter";           src: url("../fonts/inter-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+
+
+/* ==========================================================================
+   2. Design tokens
+   ========================================================================== */
+:root {
+  /* Colors */
+  --green-900:  #013220;                    /* nav, dark sections, cards */
+  --green-500:  #00A86B;                    /* accent (logo, form fields) */
+  --honeydew:   #F0FFF0;                    /* page background, light text */
+  --gold:       #F1B42F;                    /* buttons, headings on dark */
+  --gold-light: #F3DE8A;                    /* button border, sub-headings, accents */
+  --white:      #FFFFFF;
+  --black:      #000000;
+  --shade:      rgba(0, 0, 0, 0.25);        /* dividers, testimonial boxes */
+  --field-bg:   rgba(0, 168, 107, 0.25);    /* form inputs */
+
+  /* Type families */
+  --font-brand: "TeX Gyre Schola", "Century Schoolbook", "Century", Georgia, serif;   /* design: Century */
+  --font-body:  "TeX Gyre Termes", "Times New Roman", Times, serif;                   /* design: Times New Roman */
+  --font-ui:    "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;            /* design: Inter */
+
+  /* Layout */
+  --nav-height:     118px;
+  --container:      1000px;   /* main content width */
+  --container-wide: 1200px;
+  --gutter:         24px;     /* side padding on small screens */
+  --section-pad:    50px;     /* top/bottom space inside each section */
+}
+
+
+/* ==========================================================================
+   3. Base
+   ========================================================================== */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; scroll-padding-top: var(--nav-height); }
+
+body {
+  margin: 0;
+  background: var(--honeydew);
+  color: var(--black);
+  font-family: var(--font-body);
+  line-height: normal;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+
+h1, h2, h3, h4, p, blockquote, figure { margin: 0; }
+
+a { color: inherit; }
+
+/* Visible keyboard focus everywhere */
+:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+
+/* Screen-reader-only text */
+.sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0);
+  white-space: nowrap; border: 0;
+}
+
+
+/* ==========================================================================
+   4. Layout + typography utilities (reuse these on every page)
+   ========================================================================== */
+
+/* Sections: full-width bands with consistent vertical space */
+.section        { padding: var(--section-pad) 0; }
+.section--light { background: var(--honeydew); color: var(--black); }
+.section--dark  { background: var(--green-900); color: var(--white); }
+
+/* Centered content column */
+.container {
+  width: 100%;
+  max-width: calc(var(--container) + 2 * var(--gutter));
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+.container--wide { max-width: calc(var(--container-wide) + 2 * var(--gutter)); }
+
+/* Two-column split (stacks on small screens) */
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 50px;
+  align-items: start;
+}
+.split--60-40 { grid-template-columns: 3fr 2fr; align-items: center; }
+
+/* Center everything in a flex column */
+.stack-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.text-center { text-align: center; }
+
+/* Headings */
+.heading-xl { font-family: var(--font-body); font-size: 46px; font-weight: 700; }   /* section titles */
+.heading-lg { font-family: var(--font-body); font-size: 36px; font-weight: 700; }   /* feature titles */
+.heading-md { font-family: var(--font-body); font-size: 32px; font-weight: 700; }   /* column titles */
+.heading-sm { font-family: var(--font-body); font-size: 30px; font-weight: 700; }   /* sub-headers, labels */
+
+/* Body copy */
+.text-lg { font-size: 24px; }
+.text-md { font-size: 20px; }
+.text-sm { font-size: 18px; }
+
+/* Color helpers */
+.c-green      { color: var(--green-900); }
+.c-gold       { color: var(--gold); }
+.c-gold-light { color: var(--gold-light); }
+.c-white      { color: var(--white); }
+.c-black      { color: var(--black); }
+
+/* Paragraph spacing inside text blocks */
+.prose > * + * { margin-top: 25px; }
+
+
+/* ==========================================================================
+   5. Buttons
+   ========================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* Gold button: Contact Us (nav), Get Started, Send Message */
+.btn-gold {
+  min-width: 225px;
+  height: 50px;
+  padding: 0 16px;
+  border-radius: 10px;
+  border: 1px solid var(--gold-light);
+  background: var(--gold);
+  box-shadow: 2px 4px 10px 0 rgba(0, 0, 0, 0.50);
+  color: var(--black);
+  font-family: var(--font-brand);
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+}
+.btn-gold:hover,
+.btn-gold:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: 2px 6px 14px 0 rgba(0, 0, 0, 0.55);
+  filter: brightness(1.04);
+}
+.btn-gold:active { transform: translateY(1px); box-shadow: 1px 2px 6px 0 rgba(0, 0, 0, 0.5); }
+.btn-gold:disabled { opacity: 0.6; cursor: wait; transform: none; }
+
+
+/* ==========================================================================
+   6. Header / nav
+   ========================================================================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--green-900);
+  height: var(--nav-height);
+  transition: box-shadow 0.2s ease;
+}
+.site-header.scrolled { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35); }
+
+.nav-container {
+  height: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;   /* brand left, links right */
+  gap: 24px;
+}
+
+/* Brand: logo + company name, left aligned */
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.nav-logo {
+  width: 75px;
+  height: 93px;
+  aspect-ratio: 25 / 31;
+  object-fit: contain;
+}
+
+/* Company name: shared by the nav and the hero */
+.brand-name {
+  font-family: var(--font-brand);
+  font-style: normal;
+  line-height: normal;
+  text-transform: uppercase;   /* displays "ARCVERUS"; the HTML keeps "ArcVerus" so screen readers say it as a word */
+}
+
+.nav-name {
+  color: var(--honeydew);
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: var(--honeydew);
+  font-size: 36px;
+  font-weight: 400;
+}
+
+/* Links, right aligned */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links a:not(.btn) {
+  color: var(--white);
+  font-family: var(--font-brand);
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-decoration: none;
+}
+.nav-links a:not(.btn):hover,
+.nav-links a:not(.btn):focus-visible { color: var(--gold); }
+
+/* Hamburger (hidden on desktop) */
+.nav-toggle {
+  display: none;
+  background: none;
+  border: 0;
+  padding: 8px;
+  cursor: pointer;
+}
+.nav-toggle span {
+  display: block;
+  width: 32px;
+  height: 3px;
+  margin: 6px 0;
+  background: var(--honeydew);
+  border-radius: 2px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+.nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+
+
+/* ==========================================================================
+   7. Components
+   ========================================================================== */
+
+/* ---------- Service card ---------- */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 250px);
+  justify-content: center;
+  column-gap: 80px;
+  row-gap: 50px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.card-grid > li { display: flex; }   /* cards in the same row share one height */
+
+.card {
+  width: 250px;
+  min-height: 250px;            /* design: 250×250; grows only if text needs more room */
+  border-radius: 31px;
+  background: var(--green-900);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;      /* vertical centering */
+  align-items: center;
+  text-align: center;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+a.card:hover,
+a.card:focus-visible {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(1, 50, 32, 0.35);
+}
+
+.card-title {
+  display: flex;
+  align-items: flex-start;      /* icon aligned to the top of the title text */
+  justify-content: center;
+  gap: 8px;
+  color: var(--gold);
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: 21px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.card-icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+}
+
+.card-text {
+  margin-top: 10px;
+  color: var(--honeydew);
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+/* ---------- Bullet list with dividers ---------- */
+.bullet-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: 450px;
+}
+.bullet-list li {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 20px 0;
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: normal;
+}
+.bullet-list li + li { border-top: 2px solid var(--shade); }   /* divider lines */
+.bullet-list li::before {
+  content: "";
+  flex-shrink: 0;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+
+/* ---------- Testimonial ---------- */
+.testimonial {
+  max-width: 450px;
+  min-height: 125px;
+  background: var(--shade);
+  border-left: 5px solid var(--gold-light);
+  padding: 20px 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.testimonial + .testimonial { margin-top: 25px; }
+
+.testimonial-quote {
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.testimonial-name {
+  margin-top: 10px;
+  color: var(--gold);
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+/* ---------- Form ---------- */
+.form-group + .form-group { margin-top: 20px; }
+
+.form-label {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--gold);
+  font-family: var(--font-body);
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.form-field {
+  display: block;
+  width: 100%;
+  max-width: 500px;
+  height: 47px;
+  padding: 10px 15px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--field-bg);
+  color: var(--black);
+  font-family: var(--font-body);
+  font-size: 20px;
+}
+.form-field:focus { outline: 3px solid var(--green-500); outline-offset: 0; }
+
+textarea.form-field {
+  height: 198px;
+  resize: vertical;
+}
+
+.form-hint {
+  max-width: 500px;
+  margin-top: 5px;
+  text-align: right;
+  font-size: 15px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.form-actions { margin-top: 25px; }
+
+.form-status {
+  max-width: 500px;
+  margin-top: 15px;
+  font-size: 18px;
+}
+.form-status:empty { display: none; }
+.form-status.is-success { color: var(--green-900); font-weight: 700; }
+.form-status.is-error   { color: #9B1C1C; }
+
+/* Honeypot field: hidden from people, visible to spam bots */
+.form-trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+
+/* ==========================================================================
+   8. Page sections (homepage)
+   ========================================================================== */
+
+/* ---------- Hero ---------- */
+.hero { padding: 50px 0 75px; }
+
+.hero-logo {
+  width: 365px;
+  height: 453px;
+  aspect-ratio: 112 / 139;
+  object-fit: contain;
+}
+
+.hero-name {
+  margin-top: 10px;
+  color: var(--green-900);
+  font-size: 64px;
+  font-weight: 700;
+}
+
+.hero-tagline {
+  margin-top: 20px;
+  color: var(--black);
+  font-family: var(--font-body);
+  font-size: 25px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.hero-sub {
+  margin-top: 20px;
+  color: var(--black);
+  font-family: var(--font-body);
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.hero .btn-gold { margin-top: 30px; min-width: 227px; }
+
+/* ---------- About ---------- */
+.about-text .heading-lg { color: var(--gold); }
+.about-text p { color: var(--white); font-size: 24px; }
+
+.about-media { justify-self: center; }
+.about-media img { width: 330px; }
+
+/* ---------- Services ---------- */
+.services .heading-xl { margin-bottom: 40px; }
+
+/* ---------- Why us ---------- */
+.why-us .heading-xl { margin-bottom: 40px; }
+.why-us .heading-md { margin-bottom: 20px; }
+
+/* ---------- Contact ---------- */
+.contact-head { margin-bottom: 50px; }
+.contact-head .heading-sm { margin-top: 10px; }
+
+.contact-info { margin: 0; }
+.contact-item + .contact-item { margin-top: 30px; }
+.contact-item dt { color: var(--gold); font-size: 30px; font-weight: 700; }
+.contact-item dd { margin: 5px 0 0; color: var(--black); font-size: 30px; }
+.contact-item a { text-decoration: none; }
+.contact-item a:hover { text-decoration: underline; }
+
+
+/* ==========================================================================
+   9. Footer
+   ========================================================================== */
+.site-footer {
+  width: 100%;
+  min-height: 65px;
+  border: 1px solid var(--honeydew);
+  background: var(--green-900);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px var(--gutter);
+}
+.site-footer p {
+  color: var(--white);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-align: center;
+}
+
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+/* Nav: the full desktop nav needs ~1250px; below that, links move into a menu */
+@media (max-width: 1280px) {
+  .nav-container { padding: 0 var(--gutter); }
+  .nav-toggle { display: block; }
+
+  .nav-links {
+    position: absolute;
+    top: var(--nav-height);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 0;
+    padding: 8px var(--gutter) 24px;
+    background: var(--green-900);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.35);
+    display: none;
+  }
+  .nav-links.open { display: flex; }
+  .nav-links li { width: 100%; text-align: center; }
+  .nav-links a:not(.btn) { display: block; padding: 14px 0; font-size: 28px; }
+  .nav-links .btn { margin-top: 12px; }
+}
+
+/* Service grid: 3 → 2 columns */
+@media (max-width: 960px) {
+  .card-grid { grid-template-columns: repeat(2, 250px); column-gap: 40px; }
+}
+
+/* Two-column layouts stack */
+@media (max-width: 900px) {
+  .split,
+  .split--60-40 { grid-template-columns: 1fr; gap: 40px; }
+  .about-media { justify-self: center; }
+  .bullet-list,
+  .testimonial { max-width: none; }
+}
+
+/* Phones */
+@media (max-width: 600px) {
+  :root { --nav-height: 84px; --gutter: 16px; --section-pad: 40px; }
+
+  .nav-logo { width: 52px; height: 64px; }
+  .nav-name { font-size: 28px; }
+
+  .card-grid { grid-template-columns: minmax(0, 320px); }
+  .card { width: 100%; }
+
+  .heading-xl { font-size: 34px; }
+  .heading-lg { font-size: 30px; }
+  .heading-md { font-size: 28px; }
+  .heading-sm,
+  .form-label,
+  .contact-item dt,
+  .contact-item dd { font-size: 24px; }
+
+  .hero-logo { width: 240px; height: auto; }
+  .hero-name { font-size: 46px; }
+  .hero-tagline { font-size: 22px; }
+  .about-text p { font-size: 20px; }
+  .about-media img { width: 100%; max-width: 330px; }
+}

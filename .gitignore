@@ -1,0 +1,15 @@
+# Dependencies / local tooling
+node_modules/
+npm-debug.log*
+
+# Secrets (the contact-form API key lives only on the server)
+.env
+.env.*
+!.env.example
+
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+*.swp
