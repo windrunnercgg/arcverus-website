@@ -63,6 +63,14 @@ certbot certonly --nginx --cert-name arcverus \
 nginx -t && systemctl reload nginx
 ```
 
+### Gotchas hit during setup
+
+- `scp` from Windows failed once with "Connection closed". Sending a file through ssh works reliably:
+  `Get-Content -Raw file | ssh root@5.161.66.0 "sed -e '1s/^\xEF\xBB\xBF//' -e 's/\r$//' > /tmp/file"`
+  (the `sed` strips the BOM and Windows line endings that PowerShell adds).
+- `certbot renew --dry-run` run without a terminal waits a random few minutes on purpose. Add
+  `--no-random-sleep-on-renew` when testing by hand.
+
 ## Checks
 
 ```powershell
