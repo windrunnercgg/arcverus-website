@@ -1,0 +1,41 @@
+# ArcVerus contact form API
+# Installed as /etc/systemd/system/arcverus-contact.service
+# Runs api/server.js as the unprivileged "arcverus" user, listening only on 127.0.0.1:3101.
+# nginx forwards https://www.arcverus.com/api/contact to it.
+#
+#   systemctl status arcverus-contact      # is it running?
+#   journalctl -u arcverus-contact -n 50   # recent log lines
+#   systemctl restart arcverus-contact     # after changing the key or the code
+
+[Unit]
+Description=ArcVerus contact form API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=arcverus
+Group=arcverus
+WorkingDirectory=/var/www/arcverus/api
+ExecStart=/usr/bin/node server.js
+Environment=NODE_ENV=production PORT=3101
+EnvironmentFile=/etc/arcverus/contact.env
+Restart=on-failure
+RestartSec=5
+
+# Hardening: read-only system, no access to home dirs or devices, no privilege gain
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=true
+LockPersonality=true
+MemoryMax=128M
+
+[Install]
+WantedBy=multi-user.target

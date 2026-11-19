@@ -17,7 +17,7 @@
   <header class="site-header">
     <nav class="nav-container" aria-label="Main">
       <a href="#top" class="nav-brand">
-        <img src="assets/images/logo-arch.svg" alt="" class="nav-logo" width="75" height="93">
+        <img src="assets/images/logo-arch-sunflower-gold.svg" alt="" class="nav-logo" width="75" height="93">
         <span class="brand-name nav-name">ArcVerus</span>
       </a>
       <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="nav-links">
@@ -155,8 +155,7 @@
           <dl class="contact-info">
             <div class="contact-item">
               <dt>Email</dt>
-              <!-- Becomes a mailto: link once the info@arcverus.com mailbox exists -->
-              <dd>info@arcverus.com</dd>
+              <dd><a href="mailto:info@arcverus.com">info@arcverus.com</a></dd>
             </div>
             <div class="contact-item">
               <dt>Phone</dt>
@@ -168,8 +167,8 @@
             </div>
           </dl>
 
-          <!-- data-live="false" until the mailbox and Resend are set up; then set to "true" -->
-          <form class="contact-form" action="/api/contact" method="POST" data-live="false" novalidate>
+          <!-- Posts to api/server.js (emails info@arcverus.com via Resend). data-live="false" shows a "coming soon" note instead. -->
+          <form class="contact-form" action="/api/contact" method="POST" data-live="true" novalidate>
             <div class="form-group">
               <label class="form-label" for="name">Name</label>
               <input class="form-field" type="text" id="name" name="name" autocomplete="name" maxlength="100" required>

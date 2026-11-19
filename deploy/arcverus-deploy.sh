@@ -18,11 +18,28 @@ if [ ! -d "$APP_DIR/.git" ]; then
   run_as_app git -C "$APP_DIR" remote add origin "$REPO"
 fi
 
-# Only the website folder is checked out on the server
-run_as_app git -C "$APP_DIR" sparse-checkout set --no-cone "/site/"
+# Only the website and the contact-form API are checked out on the server
+run_as_app git -C "$APP_DIR" sparse-checkout set --no-cone "/site/" "/api/"
+
+OLD=$(run_as_app git -C "$APP_DIR" rev-parse -q --verify HEAD || echo none)
 
 echo "==> Pulling latest main"
 run_as_app git -C "$APP_DIR" fetch -q origin main
 run_as_app git -C "$APP_DIR" reset -q --hard origin/main
 
 echo "==> Deployed commit: $(run_as_app git -C "$APP_DIR" log -1 --format='%h %s (%cr)')"
+
+# Restart the contact-form API only if its code changed (the static site needs no restart)
+SERVICE=arcverus-contact
+if systemctl is-enabled -q "$SERVICE" 2>/dev/null; then
+  if [ "$OLD" = none ] || ! run_as_app git -C "$APP_DIR" diff --quiet "$OLD" HEAD -- api; then
+    systemctl restart "$SERVICE"
+    sleep 1
+    if systemctl is-active -q "$SERVICE"; then
+      echo "==> Contact form API restarted"
+    else
+      echo "!!  Contact form API failed to start. See: journalctl -u $SERVICE -n 30"
+      exit 1
+    fi
+  fi
+fi

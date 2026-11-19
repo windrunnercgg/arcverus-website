@@ -81,12 +81,18 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(Object.fromEntries(new FormData(form))),
       });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      if (!res.ok) {
+        // The server explains validation and rate-limit problems in plain words
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || (res.status === 429
+          ? 'Too many messages. Please wait a few minutes and try again, or call us at (770) 367-4027.'
+          : ''));
+      }
       form.reset();
       if (message) message.dispatchEvent(new Event('input'));
       setStatus('Thank you! Your message has been sent. We will be in touch soon.', 'success');
     } catch (err) {
-      setStatus('Sorry, something went wrong sending your message. Please try again, or call us at (770) 367-4027.', 'error');
+      setStatus(err.message || 'Sorry, something went wrong sending your message. Please try again, or call us at (770) 367-4027.', 'error');
     } finally {
       submitBtn.disabled = false;
     }
