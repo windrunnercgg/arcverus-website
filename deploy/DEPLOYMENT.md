@@ -7,7 +7,7 @@ nginx serves both sites from the same IP and picks the right site by domain name
 |---|---|
 | Main address | https://www.arcverus.com |
 | Redirects to main | `arcverus.com`, `www.arcverus.net`, `arcverus.net`, all `http://` |
-| Site files | `/var/www/arcverus/site` (only the repo's `site/` folder is checked out) |
+| Site files | `/var/www/arcverus/site` (only the repo's `site/` and `api/` folders are checked out) |
 | File owner | `arcverus` system user (no login shell), kept separate from CGG's `cggapp` |
 | nginx config | `/etc/nginx/sites-available/www-arcverus` → symlinked in `sites-enabled` |
 | SSL certificate | Let's Encrypt, cert name `arcverus`, renewed by the existing `certbot.timer` |
@@ -24,7 +24,8 @@ ssh root@5.161.66.0 arcverus-deploy
 ```
 
 The script fetches `main` from the public GitHub repo and resets the server copy to it. It prints the deployed commit.
-No restart is needed for a static site.
+No restart is needed for the static site. If anything in `api/` changed, the script restarts the
+contact form service and stops with an error if it doesn't come back up.
 
 > SSH from this PC uses the key `hetzner-cgg-production`, unlocked in the Windows ssh-agent
 > (`ssh-add $env:USERPROFILE\.ssh\id_ed25519`). Use Windows' `ssh.exe` (PowerShell), not Git Bash's,
@@ -79,7 +80,30 @@ curl.exe -I https://www.arcverus.com        # 200
 curl.exe -I http://arcverus.net             # 301 → https://www.arcverus.com/
 ```
 
-## Later: contact form
+## Contact form
 
-When `info@arcverus.com` exists, the contact form API (Node + Resend, run by PM2) is added. Its nginx
-`location /api/` block is already in `nginx-arcverus.conf`, commented out.
+The form on the homepage posts to `/api/contact`. nginx forwards that to `api/server.js`, a small
+Node program with no dependencies, which emails the message to `info@arcverus.com` through Resend.
+
+| Item | Value |
+|---|---|
+| Service | `arcverus-contact` (systemd unit, source: `deploy/arcverus-contact.service`) |
+| Runs as | `arcverus` user, on `127.0.0.1:3101` only, with a read-only view of the system |
+| Code | `/var/www/arcverus/api/server.js` (deployed with the site; restarted automatically when it changes) |
+| API key | `/etc/arcverus/contact.env` (`root:arcverus`, mode 640), never in git |
+| Resend | Same account as CGG. Domain `arcverus.com` (us-east-1). Key "ArcVerus Contact Form", sending access, arcverus.com only |
+| Sender | `ArcVerus Website <noreply@arcverus.com>`, reply-to = the visitor |
+| DNS for Resend | TXT `resend._domainkey`, CNAME `send` and `rsend` (GoDaddy). The Microsoft 365 mailbox records are separate; don't edit the SPF on `@` |
+| Limits | 5 messages per visitor per 10 minutes, 100 per day overall (API); 6 requests/min per IP (nginx) |
+
+```powershell
+ssh -t root@5.161.66.0 arcverus-set-resend-key        # replace the API key (prompts, input hidden; restarts the service)
+ssh root@5.161.66.0 systemctl status arcverus-contact  # is it running?
+ssh root@5.161.66.0 journalctl -u arcverus-contact -n 50   # log: one line per message, no personal details
+```
+
+Local test without sending anything: `cd api; $env:DRY_RUN='1'; node server.js` then POST JSON to
+`http://127.0.0.1:3101/api/contact` (it prints the email it would have sent).
+
+If form emails land in Junk in Microsoft 365, mark them "Not junk"; if that doesn't stick, add a
+mail-flow rule in the Exchange admin center for sender `noreply@arcverus.com`.
