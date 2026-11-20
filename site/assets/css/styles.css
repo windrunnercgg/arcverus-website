@@ -643,6 +643,23 @@ textarea.form-field {
 .service-cta .btn-gold { margin-top: 30px; }
 .service-cta .back-link { margin-top: 25px; }
 
+/* ---------- Thank-you page (after the contact form) ---------- */
+.thanks {
+  /* Fill the screen between header and footer so the footer sits at the bottom */
+  min-height: calc(100vh - var(--nav-height) - 65px);  /* 65px = footer height */
+  display: flex;
+  align-items: center;
+  padding: 70px 0;
+}
+.thanks-logo  { width: 146px; height: auto; }          /* the hero arch, at 40% */
+.thanks-title { margin-top: 25px; }
+.thanks-sub   { margin-top: 10px; }
+.thanks-text  { margin-top: 20px; max-width: 640px; }
+.thanks-sub + .thanks-text { margin-top: 30px; }
+.thanks-text a { color: var(--green-900); font-weight: 700; }
+.thanks-btn   { margin-top: 35px; }
+.thanks-link  { margin-top: 25px; }
+
 
 /* ==========================================================================
    9. Footer

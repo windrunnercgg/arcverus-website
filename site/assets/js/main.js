@@ -90,6 +90,11 @@
       }
       form.reset();
       if (message) message.dispatchEvent(new Event('input'));
+      // Go to the thank-you page if the form names one; otherwise thank them in place
+      if (form.dataset.successUrl) {
+        window.location.href = form.dataset.successUrl;
+        return;
+      }
       setStatus('Thank you! Your message has been sent. We will be in touch soon.', 'success');
     } catch (err) {
       setStatus(err.message || 'Sorry, something went wrong sending your message. Please try again, or call us at (770) 367-4027.', 'error');

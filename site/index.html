@@ -168,7 +168,7 @@
           </dl>
 
           <!-- Posts to api/server.js (emails info@arcverus.com via Resend). data-live="false" shows a "coming soon" note instead. -->
-          <form class="contact-form" action="/api/contact" method="POST" data-live="true" novalidate>
+          <form class="contact-form" action="/api/contact" method="POST" data-live="true" data-success-url="thank-you.html" novalidate>
             <div class="form-group">
               <label class="form-label" for="name">Name</label>
               <input class="form-field" type="text" id="name" name="name" autocomplete="name" maxlength="100" required>
