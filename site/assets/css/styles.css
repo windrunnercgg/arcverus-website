@@ -528,6 +528,7 @@ textarea.form-field {
 .form-status:empty { display: none; }
 .form-status.is-success { color: var(--green-900); font-weight: 700; }
 .form-status.is-error   { color: #9B1C1C; }
+.form-status a { color: inherit; font-weight: 700; }   /* tap-to-call number inside messages */
 
 /* Honeypot field: hidden from people, visible to spam bots */
 .form-trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
@@ -642,6 +643,7 @@ textarea.form-field {
 .service-cta .text-md { margin-top: 15px; }
 .service-cta .btn-gold { margin-top: 30px; }
 .service-cta .back-link { margin-top: 25px; }
+.service-cta .service-phone { margin-top: 30px; }   /* reuses the homepage .contact-item look */
 
 /* ---------- Thank-you page (after the contact form) ---------- */
 .thanks {

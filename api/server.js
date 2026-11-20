@@ -1,7 +1,8 @@
 /*
  * ArcVerus contact form API
  * ------------------------------------------------------------------
- * POST /api/contact  { name, email, message, website }  → emails info@arcverus.com via Resend
+ * POST /api/contact  { name, email, message, service, website }  → emails info@arcverus.com via Resend
+ *                    (service: a service page slug or "general"; website: honeypot, must be empty)
  * GET  /api/health   → { ok: true }
  *
  * No dependencies: Node 18+ has fetch built in. Runs behind nginx on 127.0.0.1.
@@ -28,6 +29,11 @@ const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || 'https://www.arcverus.com';
 // Same limits as the form on the page
 const LIMITS = { name: 100, email: 254, message: 2000 };
 const MAX_BODY_BYTES = 16 * 1024;
+
+// Which service page the visitor came from. Untrusted: anything not on this list becomes "general".
+// Keep in sync with SERVICES in site/assets/js/main.js (scripts/new-service-page.js adds new slugs to both).
+const SERVICES = ['strategic-consulting', 'data-management', 'enterprise-architecture', 'ai-consulting', 'creative-services', 'martech-platform', 'analytics', 'ecommerce', 'project-management'];
+const toService = (value) => (SERVICES.includes(value) ? value : 'general');
 
 // Rate limits (in memory; reset when the service restarts)
 const PER_IP_MAX = 5;                       // messages per visitor...
@@ -113,6 +119,7 @@ function validate(raw) {
     name: clean(raw.name, false),
     email: clean(raw.email, false),
     message: clean(raw.message, true),
+    service: toService(raw.service), // never rejected, just normalized
   };
   // Count characters the way the browser does (code points), not bytes
   const len = (s) => [...s].length;
@@ -122,12 +129,13 @@ function validate(raw) {
   return { data };
 }
 
-async function sendEmail({ name, email, message }) {
+async function sendEmail({ name, email, message, service }) {
   const subject = `Website message from ${name}`.slice(0, 150);
-  const text = `New message from the ArcVerus website contact form\n\nName:  ${name}\nEmail: ${email}\n\n${message}\n`;
+  const text = `New message from the ArcVerus website contact form\n\nName:    ${name}\nEmail:   ${email}\nService: ${service}\n\n${message}\n`;
   const html =
     `<p><strong>New message from the ArcVerus website contact form</strong></p>` +
-    `<p><strong>Name:</strong> ${escapeHtml(name)}<br><strong>Email:</strong> ${escapeHtml(email)}</p>` +
+    `<p><strong>Name:</strong> ${escapeHtml(name)}<br><strong>Email:</strong> ${escapeHtml(email)}` +
+    `<br><strong>Service:</strong> ${escapeHtml(service)}</p>` +
     `<p style="white-space:pre-wrap">${escapeHtml(message)}</p>`;
 
   const payload = { from: FROM, to: [TO], reply_to: email, subject, text, html };
