@@ -1,0 +1,26 @@
+{
+  "slug": "example-service",
+  "icon": "icon-cog.svg",
+  "title": "Example Service",
+  "desc": "One or two sentences for search results, about 150 characters, describing this service.",
+  "lead": "The intro paragraph shown next to the image at the top of the page. Write & as &amp; in any text field.",
+  "media": {
+    "type": "photo",
+    "src": "services/example-service.webp",
+    "w": 660,
+    "h": 858,
+    "alt": "Describe the photo for screen readers"
+  },
+  "help": [
+    "First paragraph of the dark How We Help section.",
+    "Second paragraph of the How We Help section."
+  ],
+  "features": [
+    ["First Feature", "One or two sentences about it."],
+    ["Second Feature", "One or two sentences about it."],
+    ["Third Feature", "One or two sentences about it."],
+    ["Fourth Feature", "One or two sentences about it."]
+  ],
+  "ctaTitle": "Ready to get started with this service?",
+  "ctaText": "Let's talk about what it can do for your business."
+}
