@@ -645,6 +645,19 @@ textarea.form-field {
 .service-cta .back-link { margin-top: 25px; }
 .service-cta .service-phone { margin-top: 30px; }   /* reuses the homepage .contact-item look */
 
+/* ---------- Privacy policy (text page) ---------- */
+.policy { max-width: calc(800px + 2 * var(--gutter)); }   /* narrower column for easy reading */
+.policy p,
+.policy li { font-family: var(--font-body); font-size: 20px; line-height: 1.45; color: var(--black); }
+.policy p { margin-top: 15px; }
+.policy h2 { margin-top: 45px; }
+.policy ul { margin: 15px 0 0; padding-left: 1.3em; }
+.policy li + li { margin-top: 8px; }
+.policy li::marker { color: var(--gold); }
+.policy a { color: var(--green-900); font-weight: 700; }
+.policy .policy-updated { margin-top: 10px; font-size: 18px; font-style: italic; }
+.policy .policy-updated + p { margin-top: 30px; }
+
 /* ---------- Thank-you page (after the contact form) ---------- */
 .thanks {
   /* Fill the screen between header and footer so the footer sits at the bottom */
@@ -685,6 +698,9 @@ textarea.form-field {
   line-height: normal;
   text-align: center;
 }
+.site-footer a { color: var(--white); text-decoration: underline; }
+.site-footer a:hover,
+.site-footer a:focus-visible { color: var(--gold-light); }
 
 
 /* ==========================================================================
