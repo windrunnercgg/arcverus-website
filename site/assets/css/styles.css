@@ -189,6 +189,36 @@ a { color: inherit; }
 .btn-gold:active { transform: translateY(1px); box-shadow: 1px 2px 6px 0 rgba(0, 0, 0, 0.5); }
 .btn-gold:disabled { opacity: 0.6; cursor: wait; transform: none; }
 
+/* Booking button: the primary call to action ("Book a Digital Marketing Assessment call").
+   Same gold look; smaller type so the long label fits, and it may wrap on phones. */
+.btn-book {
+  font-size: 26px;
+  height: auto;
+  min-height: 56px;
+  padding: 10px 28px;
+}
+
+/* Secondary button: a quieter outline for actions after the booking call (Send Message) */
+.btn-secondary {
+  min-width: 225px;
+  height: 50px;
+  padding: 0 16px;
+  border-radius: 10px;
+  border: 2px solid var(--green-900);
+  background: transparent;
+  color: var(--green-900);
+  font-family: var(--font-brand);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: normal;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.btn-secondary:hover { background: var(--green-900); color: var(--honeydew); }
+.btn-secondary:disabled { opacity: 0.6; cursor: wait; }
+
+/* The gold focus outline is hard to see on the light background (1.8:1); use dark green there */
+.section--light .btn:focus-visible { outline-color: var(--green-900); }
+
 
 /* ==========================================================================
    6. Header / nav
@@ -252,9 +282,12 @@ a { color: inherit; }
   align-items: center;
   gap: 36px;
   list-style: none;
-  margin: 0;
+  margin: 0 0 0 auto;
   padding: 0;
 }
+
+/* "Book a call" button: after the links on desktop; stays visible next to the menu button on smaller screens */
+.nav-book { margin-left: 12px; }   /* + the 24px nav gap = the same 36px as between links */
 
 .nav-links a:not(.btn) {
   color: var(--white);
@@ -448,6 +481,14 @@ a.card:focus-visible {
 }
 .icon-badge img { width: 32px; height: 32px; }
 
+/* ---------- Small line under a booking button ("Pick a time that works for you.") ---------- */
+.cta-note {
+  margin-top: 12px;
+  color: var(--green-900);
+  font-family: var(--font-body);
+  font-size: 18px;
+}
+
 /* ---------- Text link with arrow ("← View All Services") ---------- */
 .back-link {
   color: var(--green-900);
@@ -587,6 +628,10 @@ textarea.form-field {
 /* ---------- Services ---------- */
 .services .heading-xl { margin-bottom: 40px; }
 
+/* ---------- Booking band (closes the services section) ---------- */
+.cta-band { padding: 10px 0 60px; }
+.cta-band .btn-book { margin-top: 25px; }
+
 /* ---------- Why us ---------- */
 .why-us .heading-xl { margin-bottom: 40px; }
 .why-us .heading-md { margin-bottom: 20px; }
@@ -594,6 +639,8 @@ textarea.form-field {
 /* ---------- Contact ---------- */
 .contact-head { margin-bottom: 50px; }
 .contact-head .heading-sm { margin-top: 10px; }
+.contact-head .btn-book { margin-top: 30px; }
+.contact-head .contact-alt { margin-top: 45px; font-size: 24px; }   /* "Prefer to write? Send a message." */
 
 .contact-info { margin: 0; }
 .contact-item + .contact-item { margin-top: 30px; }
@@ -685,6 +732,8 @@ textarea.form-field {
   border: 1px solid var(--honeydew);
   background: var(--green-900);
   display: flex;
+  flex-direction: column;   /* booking link above the copyright line */
+  gap: 6px;
   align-items: center;
   justify-content: center;
   padding: 10px var(--gutter);
@@ -701,16 +750,22 @@ textarea.form-field {
 .site-footer a { color: var(--white); text-decoration: underline; }
 .site-footer a:hover,
 .site-footer a:focus-visible { color: var(--gold-light); }
+.site-footer .footer-book a { color: var(--gold-light); font-size: 14px; }
+.site-footer .footer-book a:hover,
+.site-footer .footer-book a:focus-visible { color: var(--white); }
 
 
 /* ==========================================================================
    Responsive
    ========================================================================== */
 
-/* Nav: the full desktop nav needs ~1250px; below that, links move into a menu */
-@media (max-width: 1280px) {
-  .nav-container { padding: 0 var(--gutter); }
-  .nav-toggle { display: block; }
+/* Nav: the full desktop nav needs ~1340px; below that, links move into a menu
+   and "Book a call" stays in the bar, left of the menu button */
+@media (max-width: 1360px) {
+  .nav-container { padding: 0 var(--gutter); gap: 16px; }
+  .nav-brand { margin-right: auto; }
+  .nav-toggle { display: block; order: 2; }
+  .nav-book { min-width: 0; height: 44px; margin-left: 0; padding: 0 16px; font-size: 22px; }
 
   .nav-links {
     position: absolute;
@@ -727,7 +782,6 @@ textarea.form-field {
   .nav-links.open { display: flex; }
   .nav-links li { width: 100%; text-align: center; }
   .nav-links a:not(.btn) { display: block; padding: 14px 0; font-size: 28px; }
-  .nav-links .btn { margin-top: 12px; }
 }
 
 /* Service grid: 3 → 2 columns */
@@ -749,8 +803,17 @@ textarea.form-field {
 @media (max-width: 600px) {
   :root { --nav-height: 84px; --gutter: 16px; --section-pad: 40px; }
 
-  .nav-logo { width: 52px; height: 64px; }
-  .nav-name { font-size: 28px; }
+  /* Header: brand a little smaller so "Book a call" fits beside it (down to 360px wide) */
+  .nav-container { gap: 10px; }
+  .nav-brand { gap: 8px; }
+  .nav-logo { width: 42px; height: 52px; }
+  .nav-name { font-size: 22px; }
+  .nav-book { height: 38px; padding: 0 12px; font-size: 16px; box-shadow: 1px 2px 6px 0 rgba(0, 0, 0, 0.5); }
+  .nav-toggle { padding: 4px; }
+  .nav-toggle span { width: 28px; }
+
+  .btn-book { max-width: 100%; font-size: 21px; line-height: 1.2; white-space: normal; }   /* long label wraps */
+  .contact-head .contact-alt { font-size: 20px; }
 
   .card-grid { grid-template-columns: minmax(0, 320px); }
 
