@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
+  <a href="#main" class="skip-link">Skip to main content</a>
 
   <!-- ===================== Header / nav ===================== -->
   <!-- No id="top" here: "#top" links scroll to the very top of the page only when no element has that id. -->
@@ -35,7 +36,7 @@
     </nav>
   </header>
 
-  <main>
+  <main id="main">
 
     <!-- ===================== 1. Hero ===================== -->
     <section class="section--light hero" id="hero">
@@ -118,9 +119,9 @@
     </section>
 
     <!-- ===================== 3b. Booking band ===================== -->
-    <section class="section--light cta-band">
+    <section class="section--light cta-band" aria-labelledby="cta-band-title">
       <div class="container stack-center">
-        <h2 class="heading-lg c-green">Let&rsquo;s talk about your goals.</h2>
+        <h2 class="heading-lg c-green" id="cta-band-title">Let&rsquo;s talk about your goals.</h2>
         <a href="https://calendly.com/garner-arcverus/digital-marketing-assessment-call?utm_source=arcverus.com&amp;utm_medium=website&amp;utm_campaign=assessment-call&amp;utm_content=services-band" class="btn btn-gold btn-book" target="_blank" rel="noopener noreferrer" data-cta="services-band">Book a Digital Marketing Assessment call<span class="sr-only"> (opens in a new tab)</span></a>
         <p class="cta-note">Pick a time that works for you.</p>
       </div>

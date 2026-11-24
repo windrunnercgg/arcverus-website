@@ -82,6 +82,24 @@ a { color: inherit; }
 /* Visible keyboard focus everywhere */
 :focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
 
+/* "Skip to main content": first thing keyboard users reach; hidden until it has focus */
+.skip-link {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 200;               /* above the sticky header */
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: var(--gold);
+  color: var(--black);
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-weight: 700;
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+.skip-link:focus { transform: none; outline: 3px solid var(--honeydew); outline-offset: 2px; }
+
 /* Screen-reader-only text */
 .sr-only {
   position: absolute !important;
@@ -864,7 +882,8 @@ textarea.form-field {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .btn-gold,
-  .btn-secondary { transition: none; }
+  .btn-secondary,
+  .skip-link { transition: none; }
   .btn-gold:hover,
   .btn-gold:focus-visible,
   .btn-gold:active { transform: none; }

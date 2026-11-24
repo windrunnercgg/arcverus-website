@@ -101,6 +101,7 @@ const html = `<!DOCTYPE html>
   <link rel="stylesheet" href="../assets/css/styles.css">
 </head>
 <body data-service-name="${p.slug}">
+  <a href="#main" class="skip-link">Skip to main content</a>
 
   <!-- ===================== Header / nav (same as homepage; links point back to it) ===================== -->
   <header class="site-header">
@@ -123,7 +124,7 @@ const html = `<!DOCTYPE html>
     </nav>
   </header>
 
-  <main>
+  <main id="main">
 
     <!-- ===================== Service intro ===================== -->
     <section class="section section--light service-hero">
