@@ -201,7 +201,7 @@ a { color: inherit; }
 /* Secondary button: a quieter outline for actions after the booking call (Send Message) */
 .btn-secondary {
   min-width: 225px;
-  height: 50px;
+  min-height: 50px;   /* min-height, so enlarged text never spills out */
   padding: 0 16px;
   border-radius: 10px;
   border: 2px solid var(--green-900);
@@ -287,7 +287,10 @@ a { color: inherit; }
 }
 
 /* "Book a call" button: after the links on desktop; stays visible next to the menu button on smaller screens */
-.nav-book { margin-left: 12px; }   /* + the 24px nav gap = the same 36px as between links */
+.nav-book {
+  margin-left: 12px;                /* + the 24px nav gap = the same 36px as between links */
+  height: auto; min-height: 50px;   /* grows if visitors enlarge text, instead of text spilling out */
+}
 
 .nav-links a:not(.btn) {
   color: var(--white);
@@ -750,7 +753,12 @@ textarea.form-field {
 .site-footer a { color: var(--white); text-decoration: underline; }
 .site-footer a:hover,
 .site-footer a:focus-visible { color: var(--gold-light); }
-.site-footer .footer-book a { color: var(--gold-light); font-size: 14px; }
+.site-footer .footer-book a {
+  display: inline-block;
+  padding: 4px 2px;          /* at least 24px tall: WCAG 2.2 minimum target size */
+  color: var(--gold-light);
+  font-size: 14px;
+}
 .site-footer .footer-book a:hover,
 .site-footer .footer-book a:focus-visible { color: var(--white); }
 
@@ -765,7 +773,7 @@ textarea.form-field {
   .nav-container { padding: 0 var(--gutter); gap: 16px; }
   .nav-brand { margin-right: auto; }
   .nav-toggle { display: block; order: 2; }
-  .nav-book { min-width: 0; height: 44px; margin-left: 0; padding: 0 16px; font-size: 22px; }
+  .nav-book { min-width: 0; min-height: 44px; margin-left: 0; padding: 0 16px; font-size: 22px; }
 
   .nav-links {
     position: absolute;
@@ -808,7 +816,8 @@ textarea.form-field {
   .nav-brand { gap: 8px; }
   .nav-logo { width: 42px; height: 52px; }
   .nav-name { font-size: 22px; }
-  .nav-book { height: 38px; padding: 0 12px; font-size: 16px; box-shadow: 1px 2px 6px 0 rgba(0, 0, 0, 0.5); }
+  .nav-book { min-height: 38px; padding: 0 12px; font-size: 16px; box-shadow: 1px 2px 6px 0 rgba(0, 0, 0, 0.5);
+              white-space: normal; line-height: 1.1; text-align: center; }   /* wraps only if visitors widen text spacing */
   .nav-toggle { padding: 4px; }
   .nav-toggle span { width: 28px; }
 
@@ -837,4 +846,26 @@ textarea.form-field {
   .icon-badge img { width: 26px; height: 26px; }
   .service-lead { font-size: 20px; }
   .service-media--photo img { width: 100%; max-width: 330px; }
+}
+
+/* Very narrow screens (and 400% zoom on a laptop): the header can't fit logo, name, "Book a call"
+   and the menu button, so the name is hidden visually. Screen readers still read it as the home link's name. */
+@media (max-width: 359px) {
+  .nav-name {
+    position: absolute;
+    width: 1px; height: 1px;
+    margin: -1px; padding: 0;
+    overflow: hidden; clip: rect(0 0 0 0);
+    white-space: nowrap; border: 0;
+  }
+}
+
+/* Visitors who ask their device for less motion: no smooth scrolling or moving buttons */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .btn-gold,
+  .btn-secondary { transition: none; }
+  .btn-gold:hover,
+  .btn-gold:focus-visible,
+  .btn-gold:active { transform: none; }
 }
