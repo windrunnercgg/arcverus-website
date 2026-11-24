@@ -57,8 +57,8 @@
   const submitBtn = form.querySelector('button[type="submit"]');
   const serviceField = form.querySelector('input[name="service"]');
 
-  // Which service the visitor is asking about: ?service=<slug> (from a service page's
-  // "Get in Touch" button), else the last service page viewed in this tab, else "general"
+  // Which service the visitor is asking about: ?service=<slug> (if a link supplies one),
+  // else the last service page viewed in this tab, else "general"
   if (serviceField) {
     const fromUrl = new URLSearchParams(window.location.search).get('service');
     serviceField.value = SERVICES.includes(fromUrl) ? fromUrl : toService(store.get(LAST_SERVICE_KEY));

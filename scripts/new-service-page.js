@@ -7,8 +7,8 @@
  *   node scripts/new-service-page.js my-page.json --force      (overwrite an existing page)
  *
  * Writes site/services/<slug>.html from the shared template below, so every new page gets
- * the same header, footer, tracking (tracking.js + data-service-name), "Get in Touch" link
- * (/?service=<slug>#contact) and call-to-action phone number as the existing pages.
+ * the same header, footer, tracking (tracking.js + data-service-name), booking button
+ * (Calendly, data-cta="service-page") and call-to-action phone number as the existing pages.
  *
  * It also adds the slug to the SERVICES allowlists in site/assets/js/main.js and api/server.js,
  * so the contact form accepts it as a service_name.
@@ -161,7 +161,7 @@ ${p.features.map(([h, t]) => `          <li class="feature">
       <div class="container stack-center">
         <h2 class="heading-xl c-green">${typo(p.ctaTitle)}</h2>
         <p class="text-md">${typo(p.ctaText)}</p>
-        <a href="/?service=${p.slug}#contact" class="btn btn-gold">Get in Touch</a>
+        <a href="https://calendly.com/garner-arcverus/digital-marketing-assessment-call?utm_source=arcverus.com&amp;utm_medium=website&amp;utm_campaign=assessment-call&amp;utm_content=service-page" class="btn btn-gold btn-book" target="_blank" rel="noopener noreferrer" data-cta="service-page">Book a Digital Marketing Assessment call<span class="sr-only"> (opens in a new tab)</span></a>
         <dl class="contact-info service-phone">
           <div class="contact-item">
             <dt>Phone</dt>
